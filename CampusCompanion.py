@@ -69,6 +69,30 @@ def register():
             return flask.redirect('/', code=302)
     return flask.render_template('registration.html', form=loginForm)
 
+
+@app.route('/reportIssue', methods=['GET', 'POST'])
+def reportIssue():
+    issueForm = forms.IssueForm()
+    if issueForm.validate_on_submit():
+        flask.flash('Issue reported successfully!', 'success')
+
+        #need to check somehow if the issue has been reported
+        #in which case doesnt create another row in the db..
+        if false:
+            return 0
+
+        #store the issue in the db
+        #TODO need to specify the user id
+        else:
+            date_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
+            issue = models.CCIssue(issueForm.title.data, issueForm.description.data, issueForm.image.data,
+                               issueForm.location.data, date_time, None, 0, False)
+
+            db.session.add(issue)
+            db.session.commit()
+        return flask.redirect('/', code=302)
+    return flask.render_template('reportIssue.html', form=issueForm)
+
 if __name__ == '__main__':
 #    db.create_all()
     app.run()
