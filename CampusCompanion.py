@@ -29,13 +29,12 @@ db.create_all()
 
 @app.route('/')
 def hello_world():
-  
-    now = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
-    u = models.CCUser('abc123@soton.ac.uk', 'password');
-    i = models.CCIssue('issue1', 'descript', 'image', 'highfiled', now, now, u.id, 0)
-    db.session.add(u)
-    db.session.add(i)
-    db.session.commit()
+    #now = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
+    #u = models.CCUser('abc123@soton.ac.uk', 'password');
+    #i = models.CCIssue('issue1', 'descript', 'image', 'highfiled', now, now, u.id, 0)
+    #db.session.add(u)
+    #db.session.add(i)
+    #db.session.commit()
     return render_template("index.html", title="Home", page='home')
 
 
