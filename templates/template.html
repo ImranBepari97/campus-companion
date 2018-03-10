@@ -7,7 +7,7 @@
     <!-- Favicon -->
     <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
 
-    <link rel="stylesheet" href"https://cdn.southampton.ac.uk/assets/site/design/styles/uos.main.0.7.16.min.css">
+    <link rel="stylesheet" href="{{url_for('static',filename='style.css')}}">
 
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
@@ -16,7 +16,28 @@
 </head>
 
 <body>
-  {% block content %}
-  {% endblock %}
+  <script>
+    $( document ).ready(function() {
+      $("#{{page}}").addClass('active');
+    });
+
+  </script>
+
+  <nav class="navbar navbar-expand-lg navbar-dark appnav">
+  <a class="navbar-brand" href="#">Campus Companion</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+    <div class="navbar-nav">
+      <a class="nav-item nav-link" href="#" id='home'>Home</a>
+      <a class="nav-item nav-link" href="#" id='sub'>My Submissions</a>
+    </div>
+  </div>
+</nav>
+  <div class="container">
+    {% block content %}
+    {% endblock %}
+  </div>
 </body>
 </html>

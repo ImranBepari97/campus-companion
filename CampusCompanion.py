@@ -1,19 +1,22 @@
 from flask import Flask, render_template, request, session, redirect, flash
 from flask_sqlalchemy import SQLAlchemy
+import datetime
 import flask
 import forms
 from flask_wtf.csrf import CSRFProtect
 
-template_dir = 'templates'
+app = Flask(__name__)
+app.config.update(
+    TEMPLATES_AUTO_RELOAD = True
+)
 
-app = Flask(__name__, template_folder=template_dir)
 app.secret_key = '5accdb11b2c10a78d7c92c5fa102ea77fcd50c2058b00f6e'
 csrf = CSRFProtect(app)
 
 POSTGRES = {
     'user': 'campus',
     'pw': 'companion',
-    'db': 'CampusCompanion',
+    'db': 'cc',
     'host': 'localhost',
     'port': '5432',
 }
@@ -25,9 +28,19 @@ db = SQLAlchemy(app)
 
 
 
+db.create_all()
+
+
 @app.route('/')
 def hello_world():
-    return render_template("index.html", title="Home")
+    #now = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
+    #u = models.CCUser('abc123@soton.ac.uk', 'password');
+    #i = models.CCIssue('issue1', 'descript', 'image', 'highfiled', now, now, u.id, 0)
+    #db.session.add(u)
+    #db.session.add(i)
+    #db.session.commit()
+    return render_template("index.html", title="Home", page='home')
+
 
 
 @app.route('/login', methods=['GET', 'POST'])
