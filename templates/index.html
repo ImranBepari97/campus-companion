@@ -1,10 +1,97 @@
 {% extends "template.html" %}
 {% block content %}
-  <div class="green-notif">
-    <h1>This is a notification!</h1>
-  </div>
 
-  <div class="content">
-    <h1> Here's going to be some content </h1>
-  </div>
+
+<h3>Map</h3>
+    <div id="map"></div>
+    <script>
+    function initMap() {
+      // Styles a map in night mode.
+
+      var myLatlng = {lat: 50.9355, lng: -1.39595};
+      var map = new google.maps.Map(document.getElementById('map'), {
+        center: myLatlng,
+        zoom: 16.4,
+        styles: [
+                  {
+                    "elementType": "labels",
+                    "stylers": [
+                      {
+                        "visibility": "off"
+                      }
+                    ]
+                  },
+                  {
+                    "featureType": "administrative.land_parcel",
+                    "stylers": [
+                      {
+                        "visibility": "off"
+                      }
+                    ]
+                  },
+                  {
+                    "featureType": "administrative.neighborhood",
+                    "stylers": [
+                      {
+                        "visibility": "off"
+                      }
+                    ]
+                  },
+                  {
+                    "featureType": "poi.school",
+                    "stylers": [
+                      {
+                        "saturation": 50
+                      },
+                      {
+                        "weight": 2.5
+                      }
+                    ]
+                  },
+                  {
+                    "featureType": "poi.school",
+                    "elementType": "labels.icon",
+                    "stylers": [
+                      {
+                        "visibility": "off"
+                      }
+                    ]
+                  }
+                ]
+      });
+      var locations = [
+        ['53', 50.937438, -1.398550, 4],
+        ['59', 50.937288, -1.397605, 5],
+        ['32', 50.936368, -1.395827, 3],
+        ['16', 50.937648, -1.395555, 2],
+        ['1', 50.937665, -1.396054, 1]
+      ];
+      var infowindow = new google.maps.InfoWindow({
+        content: "Sample content"
+      });
+      for (i = 0; i < locations.length; i++) {
+        marker = new google.maps.Marker({
+        position: new google.maps.LatLng(locations[i][1], locations[i][2]),
+        label: locations[i][0],
+        map: map
+      });
+
+      google.maps.event.addListener(marker, "click",  (function(marker, i) {
+        return function() {
+          map.zoom = 18;
+          infowindow.setContent('Building' + locations[i][0]);
+          infowindow.open(map, marker);
+          map.panTo(marker.position);
+        }
+      })(marker, i));
+    }
+  };
+
+  </script>
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDXwxU7AK2cK4txFi-DiAe8YNJVfmEDTn4&callback=initMap">
+    </script>
+    <script>
+
+</script>
 {% endblock %}
