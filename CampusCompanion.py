@@ -5,10 +5,10 @@ import flask
 import forms
 
 
-template_dir = 'templates'
-
-app = Flask(__name__, template_folder=template_dir)
-
+app = Flask(__name__)
+app.config.update(
+    TEMPLATES_AUTO_RELOAD = True
+)
 POSTGRES = {
     'user': 'campus',
     'pw': 'companion',
@@ -29,13 +29,15 @@ db.create_all()
 
 @app.route('/')
 def hello_world():
+  
     now = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
     u = models.CCUser('abc123@soton.ac.uk', 'password');
     i = models.CCIssue('issue1', 'descript', 'image', 'highfiled', now, now, u.id, 0)
     db.session.add(u)
     db.session.add(i)
     db.session.commit()
-    return render_template("index.html", title="Home")
+    return render_template("index.html", title="Home", page='home')
+
 
 
 @app.route('/login', methods=['GET', 'POST'])
