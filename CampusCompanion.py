@@ -50,6 +50,16 @@ def hello_world():
     #Pass it to the html
     return render_template("index.html", submissions=allSubmissions)
 
+@app.route('/mysubmissions')
+def mysubs():
+    if 'user' in flask.request.cookies:
+        user_id = flask.request.cookies.get('user').split(" ")[1].replace(">", "")
+        # Get all the submissions in the DB
+        allSubmissions = models.CCIssue.query.filter(models.CCIssue.user_id == user_id).all()
+        # Pass it to the html
+        return render_template("index.html", submissions=allSubmissions)
+    else:
+        return flask.redirect('/login', code=302)
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -93,6 +103,9 @@ def signout():
         resp.set_cookie('user', '', expires=0)
     return flask.redirect('/', code=302)
 
+@app.route('/map')
+def map():
+    return flask.render_template('map.html')
 
 @app.route('/reportIssue', methods=['GET', 'POST'])
 def reportIssue():
