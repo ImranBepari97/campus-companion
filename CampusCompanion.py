@@ -91,9 +91,6 @@ if __name__ == '__main__':
 #    db.create_all()
     app.run()
 
-@login_manager.user_loader
-def load_user(user_id):
-    return models.CCUser.get(user_id)
 
 # Error Handlers
 
