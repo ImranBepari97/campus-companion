@@ -1,4 +1,5 @@
 Flask==0.12.2
+flask_wtf==0.14.2
 gunicorn
 itsdangerous
 Jinja2
