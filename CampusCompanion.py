@@ -1,13 +1,17 @@
 import flask
 import forms
-from flask import Flask
+from flask import Flask, render_template, request, session, redirect, flash
 
-app = Flask(__name__)
+
+template_dir = 'templates'
+
+app = Flask(__name__, template_folder=template_dir)
 
 
 @app.route('/')
 def hello_world():
-    return flask.render_template('index.html')
+    return render_template("index.html", title="Home")
+
 
 @app.route('/login', methods=['GET', 'POST'])
 def create():
