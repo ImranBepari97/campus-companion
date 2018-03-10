@@ -43,7 +43,11 @@ def hello_world():
     #db.session.commit()
     if 'user' in flask.request.cookies:
         user = flask.request.cookies.get('user')
-    return render_template("index.html", title="Home", page='home')
+
+    #Get all the submissions in the DB
+    allSubmissions = models.CCIssue.query.all()
+    #Pass it to the html
+    return render_template("index.html", submissions=allSubmissions)
 
 
 

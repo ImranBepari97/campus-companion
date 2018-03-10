@@ -8,4 +8,12 @@
   <div class="content">
     <h1> Here's going to be some content </h1>
   </div>
+
+    {% if submissions|length > 0 %}
+        {% for s in submissions %}
+
+        {% endfor %}
+    {% else %}
+        <h4> There doesn't seem to be any issues at the moment! If you see something wrong, be sure to post it! </h4>
+    {%  endif %}
 {% endblock %}
