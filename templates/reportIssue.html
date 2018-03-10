@@ -1,7 +1,7 @@
 {% extends "template.html" %}
 {% block content %}
     <h1 class="text-center">Report Issue</h1>
-    <form action="/report" method="post" name="report" class="text-centers">
+    <form action="/reportIssue" method="post" name="reportIssue" class="text-centers">
     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
         <div class="form-group">
             <div class="input-group">

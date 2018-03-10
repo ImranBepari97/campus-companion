@@ -5,6 +5,7 @@ import flask
 import forms
 from flask_wtf.csrf import CSRFProtect
 import models
+import string
 
 app = Flask(__name__)
 app.config.update(
@@ -92,30 +93,29 @@ def signout():
 @app.route('/reportIssue', methods=['GET', 'POST'])
 def reportIssue():
     if 'user' not in flask.request.cookies:
-        flask.redirect('/login', code=302)
-    else:
+        return flask.redirect('/login', code=302)
 
-        issueForm = forms.IssueForm()
-        if issueForm.validate_on_submit():
-            flask.flash('Issue reported successfully!', 'success')
+    issueForm = forms.IssueForm()
+    if issueForm.validate_on_submit():
+        flask.flash('Issue reported successfully!', 'success')
 
-            #need to check somehow if the issue has been reported
-            #in which case doesnt create another row in the db..
-            if false:
-                return 0
+        #need to check somehow if the issue has been reported
+        #in which case doesnt create another row in the db..
+        if False:
+            return 0
 
-            #store the issue in the db
-            #TODO need to specify the user id
-            else:
-                date_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
-                user_id = flask.request.cookies.get('user').split(" ")[1]
+        #store the issue in the db
+        #TODO need to specify the user id
+        else:
+            date_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
+            user_id = flask.request.cookies.get('user').split(" ")[1].replace(">", "")
 
-                issue = models.CCIssue(issueForm.title.data, issueForm.description.data, issueForm.image.data,
-                               issueForm.location.data, date_time, None, user_id, False)
+            issue = models.CCIssue(issueForm.title.data, issueForm.description.data, issueForm.image.data,
+                           issueForm.location.data, date_time, None, user_id, False)
 
-                db.session.add(issue)
-                db.session.commit()
-        return flask.redirect('/', code=302)
+            db.session.add(issue)
+            db.session.commit()
+            return flask.redirect('/', code=302)
     return flask.render_template('reportIssue.html', form=issueForm)
 
 
