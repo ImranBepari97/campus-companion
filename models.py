@@ -7,7 +7,7 @@ class Issue(db.Model):
     id = db.Column(db.Integer(), primary_key = True)
     issue_title = db.Column(db.String())
     issue_description = db.Column(db.Text())
-    image = #explore how to store images using the library SQLAlchemy-ImageAttach
+    image = db.Column(db.String()) #explore how to store images using the library SQLAlchemy-ImageAttach
     location = db.Column(db.String())
     date_submitted = db.Column(db.DateTime())
     date_fixed = db.Column(db.DateTime())
