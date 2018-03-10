@@ -5,7 +5,6 @@ import flask
 import forms
 from flask_wtf.csrf import CSRFProtect
 import models
-from flask_login import LoginManager
 
 app = Flask(__name__)
 app.config.update(
@@ -14,9 +13,6 @@ app.config.update(
 
 app.secret_key = '5accdb11b2c10a78d7c92c5fa102ea77fcd50c2058b00f6e'
 csrf = CSRFProtect(app)
-
-login_manager = LoginManager()
-login_manager.init_app(app)
 
 POSTGRES = {
     'user': 'campus',
@@ -93,10 +89,6 @@ def signout():
 if __name__ == '__main__':
 #    db.create_all()
     app.run()
-
-@login_manager.user_loader
-def load_user(user_id):
-    return models.CCUser.get(user_id)
 
 # Error Handlers
 
