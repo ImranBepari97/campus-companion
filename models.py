@@ -11,7 +11,6 @@ class CCUser(db.Model):
         self.email = email
         self.password = password
 
-
 class CCIssue(db.Model):
     __tablename__ = 'ccissue'
 

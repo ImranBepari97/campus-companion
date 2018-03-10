@@ -5,6 +5,7 @@ import flask
 import forms
 from flask_wtf.csrf import CSRFProtect
 import models
+from flask_login import LoginManager
 
 app = Flask(__name__)
 app.config.update(
@@ -13,6 +14,9 @@ app.config.update(
 
 app.secret_key = '5accdb11b2c10a78d7c92c5fa102ea77fcd50c2058b00f6e'
 csrf = CSRFProtect(app)
+
+login_manager = LoginManager()
+login_manager.init_app(app)
 
 POSTGRES = {
     'user': 'campus',
@@ -40,17 +44,27 @@ def hello_world():
     #db.session.add(u)
     #db.session.add(i)
     #db.session.commit()
+    if 'user' in flask.request.cookies:
+        user = flask.request.cookies.get('user')
     return render_template("index.html", title="Home", page='home')
 
 
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    #If the users already logged in, go index
+    if 'user' in flask.request.cookies:
+        return flask.redirect('/', code=302)
+
     loginForm = forms.LoginForm()
     if loginForm.validate_on_submit():
-        
-        flask.flash('Login successful!', 'success')
-        return flask.redirect('/', code=302)
+        data = models.CCUser.query.filter_by(email=loginForm.email.data, password=loginForm.password.data).first()
+        if data is not None:
+            resp = flask.make_response(flask.redirect('/', code=302))
+            resp.set_cookie('user', data)
+            flask.flash('Login successful!', 'success')
+            return resp
+        return flask.render_template('login.html', form=loginForm)
     return flask.render_template('login.html', form=loginForm)
 
 @app.route('/register', methods=['GET', 'POST'])
@@ -69,9 +83,20 @@ def register():
             return flask.redirect('/', code=302)
     return flask.render_template('registration.html', form=loginForm)
 
+@app.route('/signout')
+def signout():
+    if 'user' in flask.request.cookies:
+        resp = flask.make_response(flask.redirect('/', code=302))
+        resp.set_cookie('user', '', expires=0)
+    return flask.redirect('/', code=302)
+
 if __name__ == '__main__':
 #    db.create_all()
     app.run()
+
+@login_manager.user_loader
+def load_user(user_id):
+    return models.CCUser.get(user_id)
 
 # Error Handlers
 
