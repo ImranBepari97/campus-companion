@@ -151,3 +151,4 @@ venv.bak/
 
 # mypy
 .mypy_cache/
+.idea/inspectionProfiles/Project_Default.xml

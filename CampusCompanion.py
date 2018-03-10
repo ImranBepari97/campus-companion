@@ -3,12 +3,17 @@ from flask_sqlalchemy import SQLAlchemy
 import datetime
 import flask
 import forms
-
+from flask_wtf.csrf import CSRFProtect
+import models
 
 app = Flask(__name__)
 app.config.update(
     TEMPLATES_AUTO_RELOAD = True
 )
+
+app.secret_key = '5accdb11b2c10a78d7c92c5fa102ea77fcd50c2058b00f6e'
+csrf = CSRFProtect(app)
+
 POSTGRES = {
     'user': 'campus',
     'pw': 'companion',
@@ -23,7 +28,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+psycopg2://%(user)s:%(pw)s@%
 db = SQLAlchemy(app)
 
 
-import models
+
 db.create_all()
 
 
@@ -41,14 +46,31 @@ def hello_world():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    form = forms.LoginForm()
-    if form.validate_on_submit():
+    loginForm = forms.LoginForm()
+    if loginForm.validate_on_submit():
+        
         flask.flash('Login successful!', 'success')
         return flask.redirect('/', code=302)
-    return flask.render_template('login.html', title='Login', form=form)
+    return flask.render_template('login.html', form=loginForm)
+
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    loginForm = forms.RegistrationForm()
+    if loginForm.validate_on_submit():
+        flask.flash('Registration successful!', 'success')
+        #Take the information submitted, add and save the db
+        if models.CCUser.query.filter_by(email=loginForm.email.data).first():
+            flask.flash('User already exists!', 'warning')
+            return flask.render_template('registration.html', form=loginForm)
+        else:
+            u = models.CCUser(loginForm.email.data, loginForm.password.data)
+            db.session.add(u)
+            db.session.commit()
+            return flask.redirect('/', code=302)
+    return flask.render_template('registration.html', form=loginForm)
 
 if __name__ == '__main__':
-    db.create_all()
+#    db.create_all()
     app.run()
 
 # Error Handlers
