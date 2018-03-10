@@ -1,7 +1,7 @@
 {% extends "template.html" %}
 {% block content %}
     <h1 class="text-center">Log In</h1>
-    <form action="/login" method="post" name="login" class="text-centers">
+    <form action="/register" method="post" name="login" class="text-centers">
     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
         <div class="form-group">
             <div class="input-group">
@@ -12,7 +12,7 @@
                     {{ form.email(placeholder='Email', class='form-control') }}
                 {% endif %}
             </div>
-            {% for error in form.email.errors %}
+            {% for error in form.username.errors %}
                 <div class="invalid-feedback d-flex">{{ error }}</div>
             {% endfor %}
         </div>
@@ -24,6 +24,17 @@
                 {{ form.password(placeholder='Password', class='form-control') }}
             {% endif %}
             {% for error in form.password.errors %}
+                <div class="invalid-feedback">{{ error }}</div>
+            {% endfor %}
+        </div>
+        <div class="form-group">
+            <label>Confirm Password</label>
+            {% if form.confirm.errors %}
+                {{ form.confirm(placeholder='Password', class='form-control is-invalid') }}
+            {% else %}
+                {{ form.confirm(placeholder='Password', class='form-control') }}
+            {% endif %}
+            {% for error in form.confirm.errors %}
                 <div class="invalid-feedback">{{ error }}</div>
             {% endfor %}
         </div>

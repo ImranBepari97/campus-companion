@@ -39,6 +39,14 @@ def login():
         return flask.redirect('/', code=302)
     return flask.render_template('login.html', form=loginForm)
 
+@app.route('/register', methods=['GET', 'POST'])
+def login():
+    loginForm = forms.LoginForm()
+    if loginForm.validate_on_submit():
+        flask.flash('Registration successful!', 'success')
+        return flask.redirect('/', code=302)
+    return flask.render_template('login.html', form=loginForm)
+
 if __name__ == '__main__':
     db.create_all()
     app.run()
