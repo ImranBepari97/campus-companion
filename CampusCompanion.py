@@ -1,12 +1,27 @@
+from flask import Flask, render_template, request, session, redirect, flash
+from flask_sqlalchemy import SQLAlchemy
 import flask
 import forms
-from flask import Flask, render_template, request, session, redirect, flash
 
 
 template_dir = 'templates'
 
 app = Flask(__name__, template_folder=template_dir)
 
+POSTGRES = {
+    'user': 'campus',
+    'pw': 'companion',
+    'db': 'CampusCompanion',
+    'host': 'localhost',
+    'port': '5432',
+}
+
+app.config['DEBUG'] = True
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False # silence the deprecation warning
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+psycopg2://%(user)s:%(pw)s@%(host)s:%(port)s/%(db)s' % POSTGRES
+db = SQLAlchemy(app)
+
+from models import Issue, User
 
 @app.route('/')
 def hello_world():
@@ -22,6 +37,7 @@ def login():
     return flask.render_template('login.html', title='Login', form=form)
 
 if __name__ == '__main__':
+    db.create_all()
     app.run()
 
 # Error Handlers
