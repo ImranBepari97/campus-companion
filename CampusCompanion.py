@@ -14,6 +14,7 @@ app.config.update(
 app.secret_key = '5accdb11b2c10a78d7c92c5fa102ea77fcd50c2058b00f6e'
 csrf = CSRFProtect(app)
 
+
 POSTGRES = {
     'user': 'campus',
     'pw': 'companion',
@@ -40,17 +41,27 @@ def hello_world():
     #db.session.add(u)
     #db.session.add(i)
     #db.session.commit()
+    if 'user' in flask.request.cookies:
+        user = flask.request.cookies.get('user')
     return render_template("index.html", title="Home", page='home')
 
 
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    #If the users already logged in, go index
+    if 'user' in flask.request.cookies:
+        return flask.redirect('/', code=302)
+
     loginForm = forms.LoginForm()
     if loginForm.validate_on_submit():
-        
-        flask.flash('Login successful!', 'success')
-        return flask.redirect('/', code=302)
+        data = models.CCUser.query.filter_by(email=loginForm.email.data, password=loginForm.password.data).first()
+        if data is not None:
+            resp = flask.make_response(flask.redirect('/', code=302))
+            resp.set_cookie('user', data)
+            flask.flash('Login successful!', 'success')
+            return resp
+        return flask.render_template('login.html', form=loginForm)
     return flask.render_template('login.html', form=loginForm)
 
 @app.route('/register', methods=['GET', 'POST'])
@@ -69,33 +80,48 @@ def register():
             return flask.redirect('/', code=302)
     return flask.render_template('registration.html', form=loginForm)
 
+@app.route('/signout')
+def signout():
+    if 'user' in flask.request.cookies:
+        resp = flask.make_response(flask.redirect('/', code=302))
+        resp.set_cookie('user', '', expires=0)
+    return flask.redirect('/', code=302)
+
 
 @app.route('/reportIssue', methods=['GET', 'POST'])
 def reportIssue():
-    issueForm = forms.IssueForm()
-    if issueForm.validate_on_submit():
-        flask.flash('Issue reported successfully!', 'success')
+    if 'user' not in flask.request.cookies:
+        flask.redirect('/login', code=302)
+    else:
 
-        #need to check somehow if the issue has been reported
-        #in which case doesnt create another row in the db..
-        if false:
-            return 0
+        issueForm = forms.IssueForm()
+        if issueForm.validate_on_submit():
+            flask.flash('Issue reported successfully!', 'success')
 
-        #store the issue in the db
-        #TODO need to specify the user id
-        else:
-            date_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
-            issue = models.CCIssue(issueForm.title.data, issueForm.description.data, issueForm.image.data,
-                               issueForm.location.data, date_time, None, 0, False)
+            #need to check somehow if the issue has been reported
+            #in which case doesnt create another row in the db..
+            if false:
+                return 0
 
-            db.session.add(issue)
-            db.session.commit()
+            #store the issue in the db
+            #TODO need to specify the user id
+            else:
+                date_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
+                user_id = flask.request.cookies.get('user').split(" ")[1]
+
+                issue = models.CCIssue(issueForm.title.data, issueForm.description.data, issueForm.image.data,
+                               issueForm.location.data, date_time, None, user_id, False)
+
+                db.session.add(issue)
+                db.session.commit()
         return flask.redirect('/', code=302)
     return flask.render_template('reportIssue.html', form=issueForm)
+
 
 if __name__ == '__main__':
 #    db.create_all()
     app.run()
+
 
 # Error Handlers
 
