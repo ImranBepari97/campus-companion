@@ -8,3 +8,4 @@ Werkzeug
 SQLAlchemy
 Flask-SQLAlchemy
 Psycopg2
+SQLAlchemy-ImageAttach
