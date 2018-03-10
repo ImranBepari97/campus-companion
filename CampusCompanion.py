@@ -1,12 +1,13 @@
 import flask
 import forms
 from flask import Flask, render_template, request, session, redirect, flash
-
+from flask_wtf.csrf import CSRFProtect
 
 template_dir = 'templates'
 
 app = Flask(__name__, template_folder=template_dir)
-
+app.secret_key = '5accdb11b2c10a78d7c92c5fa102ea77fcd50c2058b00f6e'
+csrf = CSRFProtect(app)
 
 @app.route('/')
 def hello_world():
@@ -15,11 +16,11 @@ def hello_world():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    form = forms.LoginForm()
-    if form.validate_on_submit():
+    loginForm = forms.LoginForm()
+    if loginForm.validate_on_submit():
         flask.flash('Login successful!', 'success')
         return flask.redirect('/', code=302)
-    return flask.render_template('login.html', form=form)
+    return flask.render_template('login.html', form=loginForm)
 
 if __name__ == '__main__':
     app.run()
