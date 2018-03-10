@@ -19,7 +19,7 @@ def login():
     if form.validate_on_submit():
         flask.flash('Login successful!', 'success')
         return flask.redirect('/', code=302)
-    return flask.render_template('login.html', title='Login', form=form)
+    return flask.render_template('login.html', form=form)
 
 if __name__ == '__main__':
     app.run()
