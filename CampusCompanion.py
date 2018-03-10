@@ -4,10 +4,10 @@ import flask
 import forms
 
 
-template_dir = 'templates'
-
-app = Flask(__name__, template_folder=template_dir)
-
+app = Flask(__name__)
+app.config.update(
+    TEMPLATES_AUTO_RELOAD = True
+)
 POSTGRES = {
     'user': 'campus',
     'pw': 'companion',
@@ -25,7 +25,7 @@ from models import Issue, User
 
 @app.route('/')
 def hello_world():
-    return render_template("index.html", title="Home")
+    return render_template("index.html", title="Home", page='home')
 
 
 @app.route('/login', methods=['GET', 'POST'])
