@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, session, redirect, flash
 from flask_sqlalchemy import SQLAlchemy
+import datetime
 import flask
 import forms
 
@@ -11,7 +12,7 @@ app.config.update(
 POSTGRES = {
     'user': 'campus',
     'pw': 'companion',
-    'db': 'CampusCompanion',
+    'db': 'cc',
     'host': 'localhost',
     'port': '5432',
 }
@@ -21,11 +22,22 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False # silence the deprecation w
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+psycopg2://%(user)s:%(pw)s@%(host)s:%(port)s/%(db)s' % POSTGRES
 db = SQLAlchemy(app)
 
-from models import Issue, User
+
+import models
+db.create_all()
+
 
 @app.route('/')
 def hello_world():
+  
+    now = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
+    u = models.CCUser('abc123@soton.ac.uk', 'password');
+    i = models.CCIssue('issue1', 'descript', 'image', 'highfiled', now, now, u.id, 0)
+    db.session.add(u)
+    db.session.add(i)
+    db.session.commit()
     return render_template("index.html", title="Home", page='home')
+
 
 
 @app.route('/login', methods=['GET', 'POST'])
