@@ -3,14 +3,14 @@ import forms
 from flask import Flask, render_template, request, session, redirect, flash
 
 
-template_dir = 'templates'
-
-app = Flask(__name__, template_folder=template_dir)
-
+app = Flask(__name__)
+app.config.update(
+    TEMPLATES_AUTO_RELOAD = True
+)
 
 @app.route('/')
 def hello_world():
-    return render_template("index.html", title="Home")
+    return render_template("index.html", title="Home", page='home')
 
 
 @app.route('/login', methods=['GET', 'POST'])
