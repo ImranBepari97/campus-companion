@@ -55,9 +55,10 @@ def login():
     loginForm = forms.LoginForm()
     if loginForm.validate_on_submit():
         data = models.CCUser.query.filter_by(email=loginForm.email.data, password=loginForm.password.data).first()
+        print(data)
         if data is not None:
             resp = flask.make_response(flask.redirect('/', code=302))
-            resp.set_cookie('user', data)
+            resp.set_cookie('user', str(data))
             flask.flash('Login successful!', 'success')
             return resp
         return flask.render_template('login.html', form=loginForm)
