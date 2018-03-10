@@ -1,20 +1,22 @@
 from flask_wtf import FlaskForm
 import wtforms as fields
 import wtforms.validators as validators
-import wtforms.widgets as widgets
 
-# Create a poll
-class CreateLoginForm(FlaskForm):
-    username = fields.StringField('title', validators=[validators.DataRequired()])
-    password = fields.StringField('description', widget=widgets.TextArea(), validators=[validators.DataRequired()])
-    submit = fields.SubmitField(label='Create')
+# Login form
+class LoginForm(FlaskForm):
+    username = fields.StringField('Username', validators=[validators.DataRequired()])
+    password = fields.PasswordField('Password', [
+        validators.DataRequired(),
+    ])
+    submit = fields.SubmitField(label='Login')
 
-# Add response to a poll
-class ResponseForm(FlaskForm):
-    response = fields.StringField('response', validators=[validators.DataRequired()])
-    submit = fields.SubmitField(label='Add')
-
-
-# Check user intends to delete poll
-class DeleteForm(FlaskForm):
-    submit = fields.SubmitField(label='Delete')
+# Register form
+class RegistrationForm(FlaskForm):
+    username = fields.StringField('Username', [validators.Length(min=4, max=25)])
+    email = fields.StringField('Email Address', [validators.Length(min=6, max=35)])
+    password = fields.PasswordField('New Password', [
+        validators.DataRequired(),
+        validators.EqualTo('confirm', message='Passwords must match')
+    ])
+    confirm = fields.PasswordField('Repeat Password')
+    submit = fields.SubmitField(label='Register')
