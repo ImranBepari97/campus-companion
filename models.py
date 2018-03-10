@@ -1,4 +1,4 @@
-from app import db
+from CampusCompanion import db
 
 
 class Issue(db.Model):

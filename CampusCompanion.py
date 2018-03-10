@@ -23,7 +23,6 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False # silence the deprecation w
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+psycopg2://%(user)s:%(pw)s@%(host)s:%(port)s/%(db)s' % POSTGRES
 db = SQLAlchemy(app)
 
-from models import Issue, User
 
 
 @app.route('/')
@@ -40,15 +39,15 @@ def login():
     return flask.render_template('login.html', form=loginForm)
 
 @app.route('/register', methods=['GET', 'POST'])
-def login():
-    loginForm = forms.LoginForm()
+def register():
+    loginForm = forms.RegistrationForm()
     if loginForm.validate_on_submit():
         flask.flash('Registration successful!', 'success')
         return flask.redirect('/', code=302)
-    return flask.render_template('login.html', form=loginForm)
+    return flask.render_template('registration.html', form=loginForm)
 
 if __name__ == '__main__':
-    db.create_all()
+#    db.create_all()
     app.run()
 
 # Error Handlers

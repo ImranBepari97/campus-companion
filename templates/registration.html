@@ -1,18 +1,18 @@
 {% extends "template.html" %}
 {% block content %}
-    <h1 class="text-center">Log In</h1>
-    <form action="/register" method="post" name="login" class="text-centers">
+    <h1 class="text-center">Register</h1>
+    <form action="/register" method="post" name="register" class="text-centers">
     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
         <div class="form-group">
             <div class="input-group">
-                <div class="input-group-addon">Log In</div>
+                <div class="input-group-addon">Register </div>
                 {% if form.email.errors %}
                     {{ form.email(placeholder='Email', class='form-control is-invalid') }}
                 {% else %}
                     {{ form.email(placeholder='Email', class='form-control') }}
                 {% endif %}
             </div>
-            {% for error in form.username.errors %}
+            {% for error in form.email.errors %}
                 <div class="invalid-feedback d-flex">{{ error }}</div>
             {% endfor %}
         </div>
