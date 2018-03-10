@@ -8,4 +8,29 @@
   <div class="content">
     <h1> Here's going to be some content </h1>
   </div>
+
+    {% if submissions|length > 0 %}
+        <table class="table">
+            <thead>
+                <tr>
+                  <th scope="col">ID</th>
+                  <th scope="col">Title</th>
+                  <th scope="col">Location</th>
+                  <th scope="col">Date Submitted</th>
+                </tr>
+            </thead>
+            <tbody>
+        {% for s in submissions %}
+                <tr>
+                  <td>{{ s.id }}</td>
+                  <td>{{ s.issue_title }}</td>
+                  <td>{{ s.location }}</td>
+                  <td>{{ s.date_submitted }}</td>
+                </tr>
+        {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <h4> There doesn't seem to be any issues at the moment! If you see something wrong, be sure to post it! </h4>
+    {%  endif %}
 {% endblock %}
