@@ -1,0 +1,61 @@
+{% extends "template.html" %}
+{% block content %}
+    <h1 class="text-center">Report Issue</h1>
+    <form action="/reportIssue" method="post" name="reportIssue" class="text-centers">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+        <div class="form-group">
+            <div class="input-group">
+                <div class="input-group-addon"></div>
+                <label>Title</label>
+                {% if form.title.errors %}
+                    {{ form.title(placeholder='Title', class='form-control is-invalid') }}
+                {% else %}
+                    {{ form.title(placeholder='Title', class='form-control') }}
+                {% endif %}
+            </div>
+            {% for error in form.title.errors %}
+                <div class="invalid-feedback d-flex">{{ error }}</div>
+            {% endfor %}
+        </div>
+
+        <div class="form-group">
+            <label>Description</label>
+            {% if form.description.errors %}
+                {{ form.description(placeholder='Description', class='form-control is-invalid') }}
+            {% else %}
+                {{ form.description(placeholder='Description', class='form-control') }}
+            {% endif %}
+            {% for error in form.description.errors %}
+                <div class="invalid-feedback">{{ error }}</div>
+            {% endfor %}
+        </div>
+
+        <div class="form-group">
+            <label>Image (optional)</label>
+            {% if form.image.errors %}
+                {{ form.image(placeholder='Image', class='form-control is-invalid') }}
+            {% else %}
+                {{ form.image(placeholder='Image', class='form-control') }}
+            {% endif %}
+            {% for error in form.image.errors %}
+                <div class="invalid-feedback">{{ error }}</div>
+            {% endfor %}
+        </div>
+
+        <div class="form-group">
+            <label>Location</label>
+            {% if form.location.errors %}
+                {{ form.location(placeholder='Location', class='form-control is-invalid') }}
+            {% else %}
+                {{ form.location(placeholder='Location', class='form-control') }}
+            {% endif %}
+            {% for error in form.location.errors %}
+                <div class="invalid-feedback">{{ error }}</div>
+            {% endfor %}
+        </div>
+
+        <div class="text-center">
+            {{ form.submit(class='btn btn-primary') }}
+        </div>
+    </form>
+{% endblock %}
