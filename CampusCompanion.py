@@ -139,7 +139,7 @@ def reportIssue():
             user_id = flask.request.cookies.get('user').split(" ")[1].replace(">", "")
 
             issue = models.CCIssue(issueForm.title.data, issueForm.description.data, issueForm.image.data,
-                           issueForm.location.data, date_time, None, user_id, False)
+                           issueForm.locationBulding.data+'/'+issueForm.location.data, date_time, None, user_id, False)
 
             db.session.add(issue)
             db.session.commit()
