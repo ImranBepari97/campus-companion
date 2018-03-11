@@ -63,7 +63,8 @@ def mysubs():
 
 @app.route('/map')
 def map():
-    return render_template('map.html')
+    allSubmissions = models.CCIssue.query.all()
+    return render_template('map.html', submissions=allSubmissions)
 
 
 @app.route('/login', methods=['GET', 'POST'])
