@@ -40,6 +40,12 @@ body{
 }
 
 #map{
-	height:600px;
+	min-height:700px;
+  height: 1500px;
 	width:100%;
+}
+
+.clickable:hover{
+	cursor: pointer;
+	background-color: #a2a2a2;
 }

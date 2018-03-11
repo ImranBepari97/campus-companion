@@ -1,10 +1,15 @@
 from flask import Flask, render_template, request, session, redirect, flash
 from flask_sqlalchemy import SQLAlchemy
+from flask_uploads import UploadSet, configure_uploads, IMAGES, patch_request_class
 import datetime
 import flask
 import forms
+import os;
 from flask_wtf.csrf import CSRFProtect
 import smtplib
+from werkzeug.utils import secure_filename
+import string
+
 
 app = Flask(__name__)
 app.config.update(
@@ -14,6 +19,8 @@ app.config.update(
 app.secret_key = '5accdb11b2c10a78d7c92c5fa102ea77fcd50c2058b00f6e'
 csrf = CSRFProtect(app)
 
+UPLOAD_FOLDER = os.path.basename('uploads')
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 POSTGRES = {
     'user': 'campus',
@@ -43,6 +50,7 @@ def hello_world():
         #Get all the submissions in the DB
         allSubmissions = models.CCIssue.query.all()
         allUsers = []
+        isLoggedIn = 'user' in flask.request.cookies
         for s in allSubmissions:
             allUsers.append(db.session.query(models.CCUser).get(s.user_id))
 
@@ -50,7 +58,7 @@ def hello_world():
         user_id = flask.request.cookies.get('user').split(" ")[1].replace(">", "")
         user = db.session.query(models.CCUser).get(user_id)
         #Pass it to the html
-        return render_template("index.html", submissions=allSubmissions, admin=user.admin, users=allUsers)
+        return render_template("index.html", submissions=allSubmissions, admin=user.admin, users=allUsers, , loggedIn=isLoggedIn)
     return flask.redirect('/login', code=302)
 
 @app.route('/mysubmissions')
@@ -60,13 +68,22 @@ def mysubs():
         # Get all the submissions in the DB
         allSubmissions = models.CCIssue.query.filter(models.CCIssue.user_id == user_id).all()
         # Pass it to the html
-        return render_template("mysubmissions.html", submissions=allSubmissions)
+        return render_template("mysubmissions.html", submissions=allSubmissions, loggedIn=True)
     else:
         return flask.redirect('/login', code=302)
 
 @app.route('/map')
 def map():
-    return render_template('map.html')
+    userLoggedIn = 'user' in flask.request.cookies
+    allSubmissions = models.CCIssue.query.all()
+    return render_template('map.html', submissions=allSubmissions, loggedIn=userLoggedIn)
+
+@app.route('/issue/<issue_number>')
+def issue(issue_number):
+    userLoggedIn = 'user' in flask.request.cookies
+    allSubmissions = models.CCIssue.query.all()
+    issue_number = int(issue_number)
+    return render_template('issue.html', submissions=allSubmissions, issue=issue_number, loggedIn=userLoggedIn)
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -84,8 +101,8 @@ def login():
             resp.set_cookie('user', str(data))
             flask.flash('Login successful!', 'success')
             return resp
-        return flask.render_template('login.html', form=loginForm)
-    return flask.render_template('login.html', form=loginForm)
+        return flask.render_template('login.html', form=loginForm, loggedIn=False)
+    return flask.render_template('login.html', form=loginForm, loggedIn=False)
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -108,6 +125,7 @@ def signout():
     if 'user' in flask.request.cookies:
         resp = flask.make_response(flask.redirect('/', code=302))
         resp.set_cookie('user', '', expires=0)
+        return resp
     return flask.redirect('/', code=302)
 
 @app.route('/reportIssue', methods=['GET', 'POST'])
@@ -119,11 +137,11 @@ def reportIssue():
     if issueForm.validate_on_submit():
         flask.flash('Issue reported successfully!', 'success')
 
+
         #need to check somehow if the issue has been reported
         #in which case doesnt create another row in the db..
         if False:
-            return 0
-
+            return flask.redirect('/reportIssue', code=302)
         #store the issue in the db
         #TODO need to specify the user id
         else:
@@ -136,7 +154,7 @@ def reportIssue():
             db.session.add(issue)
             db.session.commit()
             return flask.redirect('/', code=302)
-    return flask.render_template('reportIssue.html', form=issueForm)
+    return flask.render_template('reportIssue.html', form=issueForm, loggedIn=True)
 
 @app.route('/fixed', methods=['POST'])
 def fixed():

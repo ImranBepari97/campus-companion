@@ -1,9 +1,7 @@
 {% extends "template.html" %}
 {% block content %}
 
-<div class="container">
-<h3>Map</h3>
-	    
+<div class="container" style="width:100% !important; min-width:100% !important">
 <div class="map" id="map"></div>
 </div>
     <script async defer
@@ -64,20 +62,31 @@
                 ]
       });
       var locations = [
-        ['53', 50.937438, -1.398550, 4],
-        ['59', 50.937288, -1.397605, 5],
-        ['32', 50.936368, -1.395827, 3],
-        ['16', 50.937648, -1.395555, 2],
-        ['1', 50.937665, -1.396054, 1],
-        ['25',50.934793, -1.393442, 6],
-        ['46', 50.934758, -1.399635, 7],
-        ['58', 50.936604, -1.398776, 8],
-        ['54', 50.936206, -1.398804, 9],
-        ['36', 50.934942, -1.395316, 10]
+        ['53', 50.937438, -1.398550, 4, []],
+        ['59', 50.937288, -1.397605, 5, []],
+        ['32', 50.936368, -1.395827, 3, []],
+        ['16', 50.937648, -1.395555, 2, []],
+        ['1', 50.937665, -1.396054, 1, []],
+        ['25',50.934793, -1.393442, 6, []],
+        ['46', 50.934758, -1.399635, 7, []],
+        ['58', 50.936604, -1.398776, 8, []],
+        ['54', 50.936206, -1.398804, 9, []],
+        ['36', 50.934942, -1.395316, 10, []]
       ];
       var infowindow = new google.maps.InfoWindow({
         content: "Sample content"
       });
+		{% for s in submissions %}
+			var id = "{{ s.id }}";
+			var title = "{{ s.issue_title }}";
+			var location = String(parseInt("{{ s.location }}"));
+      var exactLocation = "{{ s.location }}";
+			for(i = 0; i < locations.length; ++i) {
+				if(locations[i][0] === location)
+					locations[i][4].push("<tr class='clickable' onclick='window.location = \"/issue/"+id+"\"'><td>"+id+"</td><td>"+title+"</td><td>"+exactLocation+"</td></tr>")
+			}
+		{% endfor %}
+
       for (i = 0; i < locations.length; i++) {
         marker = new google.maps.Marker({
         position: new google.maps.LatLng(locations[i][1], locations[i][2]),
@@ -88,7 +97,16 @@
       google.maps.event.addListener(marker, "click",  (function(marker, i) {
         return function() {
           map.zoom = 18;
-          infowindow.setContent('Building' + locations[i][0]);
+					content = 'Building' + locations[i][0];
+          if (locations[i][4].length !== 0){
+          	content += "<br><hr><table class='table'><thead><th>ID</th><th>Title</th><th>Location</th></thead><tbody>";
+						for (j = 0; j < locations[i][4].length; ++j){
+							content += locations[i][4][j];
+						}
+						content += "</tbody></table>";
+					}
+
+          infowindow.setContent(content);
           infowindow.open(map, marker);
           map.panTo(marker.position);
         }

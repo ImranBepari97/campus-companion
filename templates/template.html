@@ -23,17 +23,30 @@
   </script>
 
   <nav class="navbar navbar-expand-lg navbar-dark appnav navbar-fixed-top">
-  <a class="navbar-brand" href="#">Campus Companion</a>
+  <a class="navbar-brand" href="/map">Campus Companion</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
   <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-    <div class="navbar-nav">
-      <a class="nav-item nav-link" href="#" id='home'>Home</a>
-      <a class="nav-item nav-link" href="/mysubmissions" id='sub'>My Submissions</a>
-      <a class="nav-item nav-link" href="/" id='sub'>All Submissions</a>
-    </div>
+    <ul class="navbar-nav mr-auto">
+      <div class="navbar-nav">
+          <a class="nav-item nav-link" href="/map" id='home'>Home</a>
+          <a class="nav-item nav-link" href="/mysubmissions" id='sub'>My Submissions</a>
+          <a class="nav-item nav-link" href="/" id='sub'>All Submissions</a>
+
+      </div>
+    </ul>
   </div>
+  <div class="navbar-collapse">
+        <ul class="navbar-nav ml-auto">
+            {% if loggedIn == true %}
+                <a class="nav-item nav-link" href="/signout">Sign Out</a>
+            {% else %}
+                <a class="nav-item nav-link" href="/register">Register</a>
+                <a class="nav-item nav-link" href="/login">Log In</a>
+            {% endif %}
+        </ul>
+    </div>
 </nav>
   {% block content %}
   {% endblock %}
