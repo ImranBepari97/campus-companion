@@ -1,9 +1,12 @@
 from flask import Flask, render_template, request, session, redirect, flash
 from flask_sqlalchemy import SQLAlchemy
+from flask_uploads import UploadSet, configure_uploads, IMAGES, patch_request_class
 import datetime
 import flask
 import forms
+import os;
 from flask_wtf.csrf import CSRFProtect
+from werkzeug.utils import secure_filename
 
 import string
 
@@ -15,6 +18,8 @@ app.config.update(
 app.secret_key = '5accdb11b2c10a78d7c92c5fa102ea77fcd50c2058b00f6e'
 csrf = CSRFProtect(app)
 
+UPLOAD_FOLDER = os.path.basename('uploads')
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 POSTGRES = {
     'user': 'campus',
@@ -127,11 +132,11 @@ def reportIssue():
     if issueForm.validate_on_submit():
         flask.flash('Issue reported successfully!', 'success')
 
+
         #need to check somehow if the issue has been reported
         #in which case doesnt create another row in the db..
         if False:
-            return 0
-
+            return flask.redirect('/reportIssue', code=302)
         #store the issue in the db
         #TODO need to specify the user id
         else:

@@ -33,9 +33,9 @@
         <div class="form-group">
             <label>Image (optional)</label>
             {% if form.image.errors %}
-                {{ form.image(placeholder='Image', class='form-control is-invalid') }}
+                {{ form.image(placeholder='Image', class='form-control is-invalid'  ) }}
             {% else %}
-                {{ form.image(placeholder='Image', class='form-control') }}
+                {{ form.image(placeholder='Image', class='form-control' ) }}
             {% endif %}
             {% for error in form.image.errors %}
                 <div class="invalid-feedback">{{ error }}</div>
