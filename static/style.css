@@ -40,7 +40,8 @@ body{
 }
 
 #map{
-	height:600px;
+	min-height:700px;
+  height: 1500px;
 	width:100%;
 }
 

@@ -3,19 +3,30 @@
 	{% for s in submissions %}
 		{% if issue == s.id %}
 			<div class="container">
-				<div class="green-notif"> 
-				 ID: {{s.id}} 
-				<br><hr>
-				 Title: {{s.issue_title}} 
-				<br><hr>
-				 Description: {{s.issue_description}}
-				<br><hr>
-				 Location: {{s.location}} 
-				<br><hr>
-				 Submission Date: {{s.date_submitted}} 
+				<div class = "row">
+					<div class = "col-sm-2"></div>
+
+					<div class = "col-sm-8">
+						<div class="card mt-4">
+							{% if s.image is defined %}
+	            	<img class="card-img-top img-fluid" src="http://petfinder.kz/images/no-photo.jpg" alt="">
+							{% else %}
+								<img class="card-img-top img-fluid" src="{{s.image}}" alt="">
+							{% endif %}
+
+	            <div class="card-body">
+	              <h3 class="card-title">{{s.issue_title}}</h3>
+	              <h4>Location: {{s.location}}</h4>
+								<hr>
+	              <p class="card-text">Description: {{s.issue_description}}</p>
+								<p class="cart-footer"> Date Submittied: {{s.date_submitted}} </p>
+	            </div>
+						</div>
+					</div>
+
+						<div class = "col-sm-2"></div>
 				</div>
 			</div>
 		{% endif %}
 	{% endfor %}
-	
 {% endblock %}
