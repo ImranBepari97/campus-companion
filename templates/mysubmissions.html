@@ -1,7 +1,8 @@
 {% extends "template.html" %}
 {% block content %}
-
-
+    <form action="/reportIssue">
+    <input type="submit" value="Submit an Issue" />
+    </form>
     {% if submissions|length > 0 %}
         <table class="table">
             <thead>
