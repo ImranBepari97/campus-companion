@@ -1,0 +1,21 @@
+{% extends "template.html" %}
+{% block content %}
+	{% for s in submissions %}
+		{% if issue == s.id %}
+			<div class="container">
+				<div class="green-notif"> 
+				 ID: {{s.id}} 
+				<br><hr>
+				 Title: {{s.issue_title}} 
+				<br><hr>
+				 Description: {{s.issue_description}}
+				<br><hr>
+				 Location: {{s.location}} 
+				<br><hr>
+				 Submission Date: {{s.date_submitted}} 
+				</div>
+			</div>
+		{% endif %}
+	{% endfor %}
+	
+{% endblock %}

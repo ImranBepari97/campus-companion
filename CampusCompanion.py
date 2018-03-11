@@ -66,6 +66,12 @@ def map():
     allSubmissions = models.CCIssue.query.all()
     return render_template('map.html', submissions=allSubmissions)
 
+@app.route('/issue/<issue_number>')
+def issue(issue_number):
+    allSubmissions = models.CCIssue.query.all()
+    issue_number = int(issue_number)
+    return render_template('issue.html', submissions=allSubmissions, issue=issue_number)
+
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():

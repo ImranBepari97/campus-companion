@@ -82,7 +82,7 @@
 			var location = "{{ s.location }}";
 			for(i = 0; i < locations.length; ++i) {
 				if(locations[i][0] === location)
-					locations[i][4].push("<tr><td>"+id+"</td><td>"+title+"</td></tr>")
+					locations[i][4].push("<tr class='clickable' onclick='window.location = \"/issue/"+id+"\"'><td>"+id+"</td><td>"+title+"</td></tr>")
 			}
 		{% endfor %}
 
@@ -98,7 +98,7 @@
           map.zoom = 18;
 					content = 'Building' + locations[i][0];
           if (locations[i][4].length !== 0){
-          	content += "<br><hr><table><thead><th>ID</th><th>Title</th></thead><tbody>";
+          	content += "<br><hr><table class='table'><thead><th>ID</th><th>Title</th></thead><tbody>";
 						for (j = 0; j < locations[i][4].length; ++j){
 							content += locations[i][4][j];
 						}

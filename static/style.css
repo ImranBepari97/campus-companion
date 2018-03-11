@@ -43,3 +43,8 @@ body{
 	height:600px;
 	width:100%;
 }
+
+.clickable:hover{
+	cursor: pointer;
+	background-color: #a2a2a2;
+}
