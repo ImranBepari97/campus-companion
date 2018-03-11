@@ -9,3 +9,4 @@ SQLAlchemy
 Flask-SQLAlchemy
 Psycopg2
 SQLAlchemy-ImageAttach
+Flask-Uploads
