@@ -6,10 +6,11 @@ class CCUser(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(), unique=True, nullable=False)
     password = db.Column(db.String(), nullable=False)
-
-    def __init__(self, email, password):
+    admin = db.Column(db.Boolean(), nullable=False)
+    def __init__(self, email, password, admin):
         self.email = email
         self.password = password
+        self.admin = admin
 
 class CCIssue(db.Model):
     __tablename__ = 'ccissue'
@@ -33,7 +34,6 @@ class CCIssue(db.Model):
         self.date_fixed = date_fixed
         self.user_id = user_id
         self.fixed = fixed
-
 
 
 

@@ -6,9 +6,10 @@ import flask
 import forms
 import os;
 from flask_wtf.csrf import CSRFProtect
+import smtplib
 from werkzeug.utils import secure_filename
-
 import string
+
 
 app = Flask(__name__)
 app.config.update(
@@ -36,25 +37,29 @@ db = SQLAlchemy(app)
 
 import models
 
-db.create_all()
+#import populateDB
+#populateDB.populate()
+#models.populate()
 
 
 @app.route('/')
 def hello_world():
-    #now = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
-    #u = models.CCUser('abc123@soton.ac.uk', 'password');
-    #i = models.CCIssue('issue1', 'descript', 'image', 'highfiled', now, now, u.id, 0)
-    #db.session.add(u)
-    #db.session.add(i)
-    #db.session.commit()
     if 'user' in flask.request.cookies:
         user = flask.request.cookies.get('user')
 
-    isLoggedIn = 'user' in flask.request.cookies
-    #Get all the submissions in the DB
-    allSubmissions = models.CCIssue.query.all()
-    #Pass it to the html
-    return render_template("index.html", submissions=allSubmissions, loggedIn=isLoggedIn)
+        #Get all the submissions in the DB
+        allSubmissions = models.CCIssue.query.all()
+        allUsers = []
+        isLoggedIn = 'user' in flask.request.cookies
+        for s in allSubmissions:
+            allUsers.append(db.session.query(models.CCUser).get(s.user_id))
+
+        #get the user id, if it s admin then have buttons to fix issues
+        user_id = flask.request.cookies.get('user').split(" ")[1].replace(">", "")
+        user = db.session.query(models.CCUser).get(user_id)
+        #Pass it to the html
+        return render_template("index.html", submissions=allSubmissions, admin=user.admin, users=allUsers, , loggedIn=isLoggedIn)
+    return flask.redirect('/login', code=302)
 
 @app.route('/mysubmissions')
 def mysubs():
@@ -109,7 +114,7 @@ def register():
             flask.flash('User already exists!', 'warning')
             return flask.render_template('registration.html', form=loginForm)
         else:
-            u = models.CCUser(loginForm.email.data, loginForm.password.data)
+            u = models.CCUser(loginForm.email.data, loginForm.password.data, False)
             db.session.add(u)
             db.session.commit()
             return flask.redirect('/', code=302)
@@ -151,10 +156,29 @@ def reportIssue():
             return flask.redirect('/', code=302)
     return flask.render_template('reportIssue.html', form=issueForm, loggedIn=True)
 
+@app.route('/fixed', methods=['POST'])
+def fixed():
+    print('WORKS')
+    data = request.get_json()
+    s = db.session.query(models.CCIssue).get(data.get(id))
+    s.fixed = True
+    db.session.commit()
+    user = db.session.query(models.CCUser).get(s.user_id)
+
+
+    server = smtplib.SMTP('smtp.gmail.com', 587)
+    server.starttls()
+    server.login("cchack2018@gmail.com", "campushack")
+
+    msg = "Hi, your issue " + s.title + "from " + s.location + " has been solved."
+    server.sendmail("cchack2018@gmail.com", user.email, msg)
+    server.quit()
+
 
 if __name__ == '__main__':
-#    db.create_all()
+    db.create_all()
     app.run()
+
 
 
 # Error Handlers
