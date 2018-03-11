@@ -57,7 +57,7 @@ def mysubs():
         # Get all the submissions in the DB
         allSubmissions = models.CCIssue.query.filter(models.CCIssue.user_id == user_id).all()
         # Pass it to the html
-        return render_template("index.html", submissions=allSubmissions)
+        return render_template("mysubmissions.html", submissions=allSubmissions)
     else:
         return flask.redirect('/login', code=302)
 
