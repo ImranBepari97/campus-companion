@@ -79,7 +79,7 @@
 		{% for s in submissions %}
 			var id = "{{ s.id }}";
 			var title = "{{ s.issue_title }}";
-			var location = "{{ s.location }}";
+			var location = String(parseInt("{{ s.location }}"));
 			for(i = 0; i < locations.length; ++i) {
 				if(locations[i][0] === location)
 					locations[i][4].push("<tr class='clickable' onclick='window.location = \"/issue/"+id+"\"'><td>"+id+"</td><td>"+title+"</td></tr>")
@@ -104,7 +104,7 @@
 						}
 						content += "</tbody></table>";
 					}
-					
+
           infowindow.setContent(content);
           infowindow.open(map, marker);
           map.panTo(marker.position);
