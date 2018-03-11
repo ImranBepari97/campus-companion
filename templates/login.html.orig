@@ -1,0 +1,56 @@
+{% extends "template.html" %}
+<<<<<<< HEAD
+{% block content %}
+    <h1 class="text-center">Log In</h1>
+    <form action="/login" method="post" name="login" class="text-centers">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+        <div class="form-group">
+            <div class="input-group">
+                <div class="input-group-addon">Log In</div>
+                {% if form.email.errors %}
+                    {{ form.email(placeholder='Email', class='form-control is-invalid') }}
+                {% else %}
+                    {{ form.email(placeholder='Email', class='form-control') }}
+                {% endif %}
+            </div>
+            {% for error in form.email.errors %}
+=======
+{% block container %}
+    <h1 class="text-center">Log In</h1>
+    <form action="/login" method="post" name="create" class="text-centers">
+        <div class="form-group">
+            <div class="input-group">
+                <div class="input-group-addon">Log In</div>
+                {% if form.username.errors %}
+                    {{ form.username(placeholder='Username', class='form-control is-invalid') }}
+                {% else %}
+                    {{ form.username(placeholder='Username', class='form-control') }}
+                {% endif %}
+            </div>
+            {% for error in form.username.errors %}
+>>>>>>> new_template
+                <div class="invalid-feedback d-flex">{{ error }}</div>
+            {% endfor %}
+        </div>
+        <div class="form-group">
+            <label>Password</label>
+            {% if form.password.errors %}
+<<<<<<< HEAD
+                {{ form.password(placeholder='Password', class='form-control is-invalid') }}
+            {% else %}
+                {{ form.password(placeholder='Password', class='form-control') }}
+=======
+                {{ form.password(class='form-control is-invalid') }}
+            {% else %}
+                {{ form.password(class='form-control') }}
+>>>>>>> new_template
+            {% endif %}
+            {% for error in form.password.errors %}
+                <div class="invalid-feedback">{{ error }}</div>
+            {% endfor %}
+        </div>
+        <div class="text-center">
+            {{ form.submit(class='btn btn-primary') }}
+        </div>
+    </form>
+{% endblock %}

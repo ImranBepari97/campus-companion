@@ -4,7 +4,7 @@ import datetime
 import flask
 import forms
 from flask_wtf.csrf import CSRFProtect
-import models
+
 import string
 
 app = Flask(__name__)
@@ -29,7 +29,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False # silence the deprecation w
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+psycopg2://%(user)s:%(pw)s@%(host)s:%(port)s/%(db)s' % POSTGRES
 db = SQLAlchemy(app)
 
-
+import models
 
 db.create_all()
 
@@ -50,6 +50,10 @@ def hello_world():
     #Pass it to the html
     return render_template("index.html", submissions=allSubmissions)
 
+
+@app.route('/map')
+def map():
+    return render_template('map.html')
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -92,7 +96,6 @@ def signout():
         resp = flask.make_response(flask.redirect('/', code=302))
         resp.set_cookie('user', '', expires=0)
     return flask.redirect('/', code=302)
-
 
 @app.route('/reportIssue', methods=['GET', 'POST'])
 def reportIssue():
