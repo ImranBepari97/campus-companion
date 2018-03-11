@@ -40,17 +40,18 @@ def hello_world():
     if 'user' in flask.request.cookies:
         user = flask.request.cookies.get('user')
 
-    #Get all the submissions in the DB
-    allSubmissions = models.CCIssue.query.all()
-    allUsers = []
-    for s in allSubmissions:
-        allUsers.append(db.session.query(models.CCUser).get(s.user_id))
+        #Get all the submissions in the DB
+        allSubmissions = models.CCIssue.query.all()
+        allUsers = []
+        for s in allSubmissions:
+            allUsers.append(db.session.query(models.CCUser).get(s.user_id))
 
-    #get the user id, if it s admin then have buttons to fix issues
-    user_id = flask.request.cookies.get('user').split(" ")[1].replace(">", "")
-    user = db.session.query(models.CCUser).get(user_id)
-    #Pass it to the html
-    return render_template("index.html", submissions=allSubmissions, admin=user.admin, users=allUsers)
+        #get the user id, if it s admin then have buttons to fix issues
+        user_id = flask.request.cookies.get('user').split(" ")[1].replace(">", "")
+        user = db.session.query(models.CCUser).get(user_id)
+        #Pass it to the html
+        return render_template("index.html", submissions=allSubmissions, admin=user.admin, users=allUsers)
+    return flask.redirect('/login', code=302)
 
 @app.route('/mysubmissions')
 def mysubs():
@@ -139,6 +140,7 @@ def reportIssue():
 
 @app.route('/fixed', methods=['POST'])
 def fixed():
+    print('WORKS')
     data = request.get_json()
     s = db.session.query(models.CCIssue).get(data.get(id))
     s.fixed = True

@@ -37,27 +37,30 @@
                         {% if admin %}
                         <td>
                         <div class="form-check">
-                            <input type="checkbox" class="form-check-input" id="exampleCheck1">
+                            <input type="checkbox" onchange='handleChange(this)' class="form-check-input" id="exampleCheck1">
                             <label class="form-check-label" for="exampleCheck1">Solved</label>
                             <script>
-                                $('#exampleCheck1').click(function () {
-
-                                    $(this).disabled = true;
-
-                                    $.ajax({
-                                        type : "POST",
-                                        url : "/fixed",
-                                        data: JSON.stringify({ id: s.id }),
-                                        contentType: 'application/json;charset=UTF-8',
-                                        success: function(result) {
-                                           if(result === "True"){
-                                                $.notify("Notified the user about the solved issue", "success");
-                                           }else{
-                                                $.notify("Error notifying the user", "danger");
+                                function handleChange(checkbox) {
+                                    if(checkbox.checked == true){
+                                        console.log('checked checkbox');
+                                        //$(this).disabled = true;
+                                        console.log({{s.id}});
+                                        $.ajax({
+                                            type : "POST",
+                                            url : "/fixed",
+                                            data: JSON.stringify({ id:{{s.id}}  }),
+                                            contentType: 'application/json',
+                                            success: function(result) {
+                                               if(result === "True"){
+                                                    $.notify("Notified the user about the solved issue", "success");
+                                               }else{
+                                                    $.notify("Error notifying the user", "danger");
+                                                }
                                             }
-                                        }
-                                    });
-                                })
+                                        });
+                                    }
+                                  }
+                                
                             </script>
                         </div>
                         </td>
