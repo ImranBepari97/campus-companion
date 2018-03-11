@@ -45,10 +45,11 @@ def hello_world():
     if 'user' in flask.request.cookies:
         user = flask.request.cookies.get('user')
 
+    isLoggedIn = 'user' in flask.request.cookies
     #Get all the submissions in the DB
     allSubmissions = models.CCIssue.query.all()
     #Pass it to the html
-    return render_template("index.html", submissions=allSubmissions)
+    return render_template("index.html", submissions=allSubmissions, loggedIn=isLoggedIn)
 
 @app.route('/mysubmissions')
 def mysubs():
@@ -57,20 +58,22 @@ def mysubs():
         # Get all the submissions in the DB
         allSubmissions = models.CCIssue.query.filter(models.CCIssue.user_id == user_id).all()
         # Pass it to the html
-        return render_template("mysubmissions.html", submissions=allSubmissions)
+        return render_template("mysubmissions.html", submissions=allSubmissions, loggedIn=True)
     else:
         return flask.redirect('/login', code=302)
 
 @app.route('/map')
 def map():
+    userLoggedIn = 'user' in flask.request.cookies
     allSubmissions = models.CCIssue.query.all()
-    return render_template('map.html', submissions=allSubmissions)
+    return render_template('map.html', submissions=allSubmissions, loggedIn=userLoggedIn)
 
 @app.route('/issue/<issue_number>')
 def issue(issue_number):
+    userLoggedIn = 'user' in flask.request.cookies
     allSubmissions = models.CCIssue.query.all()
     issue_number = int(issue_number)
-    return render_template('issue.html', submissions=allSubmissions, issue=issue_number)
+    return render_template('issue.html', submissions=allSubmissions, issue=issue_number, loggedIn=userLoggedIn)
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -88,8 +91,8 @@ def login():
             resp.set_cookie('user', str(data))
             flask.flash('Login successful!', 'success')
             return resp
-        return flask.render_template('login.html', form=loginForm)
-    return flask.render_template('login.html', form=loginForm)
+        return flask.render_template('login.html', form=loginForm, loggedIn=False)
+    return flask.render_template('login.html', form=loginForm, loggedIn=False)
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -112,6 +115,7 @@ def signout():
     if 'user' in flask.request.cookies:
         resp = flask.make_response(flask.redirect('/', code=302))
         resp.set_cookie('user', '', expires=0)
+        return resp
     return flask.redirect('/', code=302)
 
 @app.route('/reportIssue', methods=['GET', 'POST'])
@@ -140,7 +144,7 @@ def reportIssue():
             db.session.add(issue)
             db.session.commit()
             return flask.redirect('/', code=302)
-    return flask.render_template('reportIssue.html', form=issueForm)
+    return flask.render_template('reportIssue.html', form=issueForm, loggedIn=True)
 
 
 if __name__ == '__main__':
