@@ -1,13 +1,17 @@
 {% extends "template.html" %}
 {% block content %}
 
-
+<div class="container">
 <h3>Map</h3>
-    <div id="map"></div>
+	    
+<div class="map" id="map"></div>
+</div>
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDXwxU7AK2cK4txFi-DiAe8YNJVfmEDTn4&callback=initMap">
+    </script>
     <script>
     function initMap() {
       // Styles a map in night mode.
-
       var myLatlng = {lat: 50.9355, lng: -1.39595};
       var map = new google.maps.Map(document.getElementById('map'), {
         center: myLatlng,
@@ -93,10 +97,4 @@
   };
 
   </script>
-    <script async defer
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDXwxU7AK2cK4txFi-DiAe8YNJVfmEDTn4&callback=initMap">
-    </script>
-    <script>
-
-</script>
 {% endblock %}
