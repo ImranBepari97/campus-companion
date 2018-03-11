@@ -26,5 +26,5 @@ class IssueForm(FlaskForm):
     title = fields.StringField('Title', [validators.DataRequired()])
     description = fields.TextAreaField('Description', [validators.DataRequired(), validators.length(max=500)])
     location = fields.StringField('Location', [validators.DataRequired()])
-    image = fields.StringField('Image')
+    image = fields.FileField('Image')
     submit = fields.SubmitField(label='Submit')
