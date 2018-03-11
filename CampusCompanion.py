@@ -107,9 +107,6 @@ def signout():
         resp.set_cookie('user', '', expires=0)
     return flask.redirect('/', code=302)
 
-@app.route('/map')
-def map():
-    return flask.render_template('map.html')
 @app.route('/reportIssue', methods=['GET', 'POST'])
 def reportIssue():
     if 'user' not in flask.request.cookies:
