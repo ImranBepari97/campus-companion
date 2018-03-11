@@ -8,28 +8,27 @@
     {% if submissions|length > 0 %}
         <table class="table">
             <thead>
-                <th>
                   <th scope="col">ID</th>
                   <th scope="col">Title</th>
                   <th scope="col">Location</th>
                   <th scope="col">Date Submitted</th>
                   <th scope="col">Resolved?</th>
                     {% if admin %}
-                  <th scope = "col">Mark as fixed</th>>
+                  <th scope = "col">Mark as fixed</th>
                     {% endif %}
                 </tr>
             </thead>
             <tbody>
             {% for s in submissions %}
-                    <tr class="clickable" data-toggle="modal" data-target="#modal{{s.id}}">
-                      <td>{{ s.id }}</td>
-                      <td>{{ s.issue_title }}</td>
-                      <td>{{ s.location }}</td>
-                      <td>{{ s.date_submitted }}</td>
+                    <tr class="clickable">
+                      <td  data-toggle="modal" data-target="#modal{{s.id}}">{{ s.id }}</td>
+                      <td  data-toggle="modal" data-target="#modal{{s.id}}">{{ s.issue_title }}</td>
+                      <td  data-toggle="modal" data-target="#modal{{s.id}}">{{ s.location }}</td>
+                      <td  data-toggle="modal" data-target="#modal{{s.id}}">{{ s.date_submitted }}</td>
                     {% if s.fixed == true %}
-                  <td> <i class="fas fa-check"></i> </td>
+                  <td  data-toggle="modal" data-target="#modal{{s.id}}"> <i class="fas fa-check"></i> </td>
                     {% else %}
-                  <td> <i class="fas fa-times"></i> </td>
+                  <td  data-toggle="modal" data-target="#modal{{s.id}}"> <i class="fas fa-times"></i> </td>
                         {% if admin %}
                         <td>
                         <div class="form-check">

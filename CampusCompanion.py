@@ -58,7 +58,7 @@ def hello_world():
         user_id = flask.request.cookies.get('user').split(" ")[1].replace(">", "")
         user = db.session.query(models.CCUser).get(user_id)
         #Pass it to the html
-        return render_template("index.html", submissions=allSubmissions, admin=user.admin, users=allUsers, , loggedIn=isLoggedIn)
+        return render_template("index.html", submissions=allSubmissions, admin=user.admin, users=allUsers, loggedIn=isLoggedIn)
     return flask.redirect('/login', code=302)
 
 @app.route('/mysubmissions')
