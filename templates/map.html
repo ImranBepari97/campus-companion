@@ -62,7 +62,7 @@
                 ]
       });
       var locations = [
-        ['53', 50.937438, -1.398550, 4, []],
+        ['53', 50.937438, -1.398550, 2, []],
         ['59', 50.937288, -1.397605, 5, []],
         ['32', 50.936368, -1.395827, 3, []],
         ['16', 50.937648, -1.395555, 2, []],
@@ -71,7 +71,26 @@
         ['46', 50.934758, -1.399635, 7, []],
         ['58', 50.936604, -1.398776, 8, []],
         ['54', 50.936206, -1.398804, 9, []],
-        ['36', 50.934942, -1.395316, 10, []]
+        ['36', 50.934942, -1.395316, 10, []],
+        ['45', 50.937846, -1.394003, 11, []],
+        ['20', 50.936945, -1.395100, 12, []],
+        ['85', 50.936600, -1.395346, 13, []],
+        ['8', 50.936580, -1.394745, 14, []],
+        ['67', 50.936755, -1.396585, 15, []],
+        ['2', 50.936170, -1.398197, 16, []],
+        ['52', 50.935841, -1.398725, 17, []],
+        ['50', 50.936150, -1.399413, 19, []],
+        ['48', 50.935682, -1.399486, 20, []],
+        ['39', 50.936722, -1.399262, 21, []],
+        ['38', 50.935351, -1.397388, 22, []],
+        ['40', 50.934956, -1.397491, 23, []],
+        ['42', 50.934229, -1.397612, 24, []],
+        ['44', 50.934505, -1.398948, 25, []],
+        ['18', 50.933915, -1.396671, 26, []],
+        ['57', 50.934393, -1.396658, 27, []],
+        ['7', 50.935348, -1.393738, 28, []],
+        ['5', 50.935677, -1.394816, 29, []],
+        ['34', 50.934513, -1.395305, 30, []]
       ];
       var infowindow = new google.maps.InfoWindow({
         content: "Sample content"
@@ -85,19 +104,22 @@
 				if(locations[i][0] === location)
 					locations[i][4].push("<tr class='clickable' onclick='window.location = \"/issue/"+id+"\"'><td>"+id+"</td><td>"+title+"</td><td>"+exactLocation+"</td></tr>")
 			}
+      //locations = locations.sort();
 		{% endfor %}
-
+      debug = "";
       for (i = 0; i < locations.length; i++) {
+        //debug+='(\''+locations[i][0]+'\', \''+locations[i][0]+'\'), ';
         marker = new google.maps.Marker({
         position: new google.maps.LatLng(locations[i][1], locations[i][2]),
         label: locations[i][0],
         map: map
       });
 
+      //console.log(debug)
       google.maps.event.addListener(marker, "click",  (function(marker, i) {
         return function() {
           map.zoom = 18;
-					content = 'Building' + locations[i][0];
+					content = 'Building ' + locations[i][0];
           if (locations[i][4].length !== 0){
           	content += "<br><hr><table class='table'><thead><th>ID</th><th>Title</th><th>Location</th></thead><tbody>";
 						for (j = 0; j < locations[i][4].length; ++j){

@@ -1,7 +1,8 @@
 {% extends "template.html" %}
 {% block content %}
+  <div class="container">
     <form action="/reportIssue">
-    <input type="submit" value="Submit an Issue" />
+    <input class="btn btn-default" type="submit" value="Submit an Issue" style="width:100%" />
     </form>
     {% if submissions|length > 0 %}
         <table class="table">
@@ -16,7 +17,7 @@
             </thead>
             <tbody>
         {% for s in submissions %}
-                <tr>
+                <tr class="clickable" data-toggle="modal" data-target="#modal{{s.id}}">
                   <td>{{ s.id }}</td>
                   <td>{{ s.issue_title }}</td>
                   <td>{{ s.location }}</td>
@@ -27,10 +28,53 @@
                 <td> <i class="fas fa-times"></i> </td>
                     {% endif %}
                 </tr>
+                <div class="modal fade" id="modal{{s.id}}">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+
+                      <!-- Modal Header -->
+                      <div class="modal-header clickable" onclick="window.location = '/issue/{{s.id}}'">
+                        <h4 class="modal-title">{{s.issue_title}}
+                          {% if s.fixed == true %}
+                            <i class="fas fa-check"></i>
+                          {% else %}
+                            <i class="fas fa-times"></i>
+                         {% endif %}
+                       </h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                      </div>
+
+                      <!-- Modal body -->
+                      <div class="modal-body">
+                        <div class="card mt-4">
+                          {% if s.image is defined %}
+                            <img class="card-img-top img-fluid" src="http://petfinder.kz/images/no-photo.jpg" alt="">
+                          {% else %}
+                            <img class="card-img-top img-fluid" src="{{s.image}}" alt="">
+                          {% endif %}
+
+                          <div class="card-body">
+                            <h3 class="card-title">Description:</h3><p>{{s.issue_description}}
+                            <hr>
+                            <p class="card-text">Location: {{s.location}}</p>
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- Modal footer -->
+                      <div class="modal-footer">
+                        <div class="mr-auto"> Submission date: {{s.date_submitted}} </div>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                      </div>
+
+                    </div>
+                  </div>
+                </div>
         {% endfor %}
             </tbody>
         </table>
     {% else %}
         <h4> There doesn't seem to be any issues at the moment! If you see something wrong, be sure to post it! </h4>
     {%  endif %}
+  </div>
 {% endblock %}

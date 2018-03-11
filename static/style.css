@@ -34,18 +34,17 @@ body{
   background-color: #white;
 }
 
-.map{
-	height:600px;
-	width:100%;
-}
-
 #map{
 	min-height:700px;
-  height: 1500px;
+  height: 900px;
 	width:100%;
 }
 
 .clickable:hover{
 	cursor: pointer;
 	background-color: #a2a2a2;
+}
+
+.container{
+  margin-top: 1em;
 }
